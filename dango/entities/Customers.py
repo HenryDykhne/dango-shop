@@ -38,7 +38,7 @@ class Customer:
     def offer(self, stick):
         if self.phase == Customer.WAITING and stick == self.demand:
             self.age = 0.0
-            self.phase = Customer.self.LEAVING
+            self.phase = Customer.LEAVING
             return True
         return False
 
@@ -94,13 +94,13 @@ class Customers:
     def _reset_cooldown(self):
         self.cooldown = random.choice(Customers.COOLDOWNS)
 
-    def offer(stick):
+    def offer(self, stick):
         for customer in self.stalls:
             if customer != None and customer.offer(stick):
                 return True
         return False
 
-    def update(self, dt):
+    def update(self, dt, dango_holders):
         self.cooldown -= dt
 
         # add new customers
@@ -121,6 +121,14 @@ class Customers:
                 if customer.isGone():
                     self.stalls[i] = None
                     self.free_stalls.append(i)
+        
+        # Offer dango to customers
+        used_stick = None
+        for stick in dango_holders.sticks:
+            if self.offer(stick):
+                used_stick = stick
+        if used_stick:
+            dango_holders.sticks.remove(used_stick)
 
     def draw(self, screen):
         for i in range(Customers.MAX_CUSTOMERS):

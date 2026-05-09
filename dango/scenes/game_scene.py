@@ -84,7 +84,7 @@ class GameScene:
                 except ValueError:
                     pass
 
-        self.customers.update(dt)
+        self.customers.update(dt, self.dango_holders)
 
     def draw(self, screen):
         # draw field background
