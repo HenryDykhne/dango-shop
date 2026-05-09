@@ -5,7 +5,7 @@ from dango.entities.cannon import Cannon
 from dango.entities.Customers import Customers
 from dango.entities.dangoHolders import DangoHolders
 from dango.systems.bag import Bag, Queue
-from dango.settings import DAYS, PARRY_ENDLAG_DURATION, STAB_ENDLAG_DURATION
+from dango.settings import DAYS, reset_score_info, PARRY_ENDLAG_DURATION, STAB_ENDLAG_DURATION
 from dango.ui.hud import HUD
 
 
@@ -27,6 +27,9 @@ class GameScene:
         self.hud = HUD(self)
         # visual indicator for a recent parry-up: dict with t,dur,slot
         self.parry_indicator = None
+
+        reset_score_info()
+
         self.last_parry_time = None
         self.last_stab_time = None
 

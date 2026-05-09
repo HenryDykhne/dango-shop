@@ -127,3 +127,19 @@ DAYS = [
 #     "quota": 5500,
 #     "volley_gap": 2.5,
 # },
+
+
+def init_settings():
+    global score_information
+    score_information = {}
+    reset_score_info()
+
+def reset_score_info():
+    score_information['_current'] = 0
+
+def add_score(score):
+    score_information['_current'] += score
+
+def current_score():
+    return score_information['_current']
+
