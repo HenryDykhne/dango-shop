@@ -63,9 +63,6 @@ class Ball:
     def on_parried_down(self):
         pass
 
-    def on_caught(self, player):
-        player.stick.append(self)
-
 
 class PinkBall(Ball):
     def __init__(self, x, y, angle_rad=math.pi):

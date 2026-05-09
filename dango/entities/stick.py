@@ -1,13 +1,25 @@
-class Stick:
-    def __init__(self, max_balls):
-        self.max_balls = max_balls
-        self.balls = []
+import pygame
+from dango.settings import DAYS, BALL_COLORS
 
-    def add(self, ball):
-        if len(self.balls) < self.max_balls:
-            self.balls.append(ball)
-            return True
-        return False
-        
-    def clear(self):
-        self.balls.clear()
+class Stick:
+    def __init__(self, on_complete_stick, day):
+        self.max_balls = DAYS[day - 1]['stick_size']
+        self.ball_keys = []
+        self.on_complete_stick = on_complete_stick
+
+    def add(self, ball_key):
+        self.ball_keys.append(ball_key)
+        if len(self.ball_keys) >= self.max_balls:
+            self.on_complete_stick(self.ball_keys)
+            self.ball_keys = []
+    
+    def draw(self, screen, x_offset, y_offset):
+        # TODO Draw the stick here when we have the sprite for it
+        radius = 6
+        dx, dy = 0, radius*2 + 1
+        for i, colorName in enumerate(self.ball_keys):
+            color = BALL_COLORS[colorName]
+            x = x_offset + dx*i
+            y = y_offset + dy*i
+
+            pygame.draw.circle(screen, color, (x, y), radius)

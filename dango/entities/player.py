@@ -1,16 +1,17 @@
 import pygame
 from dango.settings import FIELD_TOP, FIELD_BOTTOM, PLAYER_SPEED
+from dango.entities.stick import Stick
 
 
 class Player:
-    def __init__(self, x, y):
+    def __init__(self, x, y, day):
         self.x = float(x)
         self.y = float(y)
         self.w = 40
         self.h = 60
         self.speed = PLAYER_SPEED
-        self.stick = []
         self.scramble_controls_till = pygame.time.get_ticks() / 1000.0 - 1.0  # time until which controls are scrambled; initialized to past time
+        self.stick = Stick(self._on_complete_stick, day)
         # visual parry effects: list of dicts {dir, t, dur}
         self._parries = []
         # visual stab effects: list of dicts {t, dur}
@@ -63,6 +64,9 @@ class Player:
                 except ValueError:
                     pass
 
+    def _on_complete_stick(self, color_keys):
+        pass # TODO make this show up on the UI as a complete stick, and try to give it
+
     def compute_parry_rect(self, direction, prog=0.0):
         """Return the parry hitbox Rect for `direction` at progress `prog` (0..1)."""
         if direction not in ('up', 'down'):
@@ -98,8 +102,8 @@ class Player:
         stab_rect = self.compute_stab_rect(prog=0.0)
         for b in list(balls):
             if b.alive and stab_rect.colliderect(b.get_rect()):
-                b.on_caught(self)
                 b.alive = False
+                self.stick.add(b.color_key)
 
     def start_stab(self):
         """Start a short visual stab effect and used hitbox for collisions."""
@@ -132,3 +136,5 @@ class Player:
             color = (255, 200, 60, alpha)
             pygame.draw.rect(surf, color, pygame.Rect(0, 0, rect.width, rect.height))
             screen.blit(surf, (rect.x, rect.y))
+        # draw the stick
+        self.stick.draw(screen, self.x + self.w, int(self.y + self.h/2))

@@ -15,7 +15,7 @@ class GameScene:
         self.bag = Bag(cfg["bag"])
         # the cannon will feed from this queue; it is prefilled from the bag
         self.queue = Queue(self.bag, size=8)
-        self.player = Player(200, 400)
+        self.player = Player(200, 400, day=day)
         self.cannon = Cannon()
         self.balls = []
         self.volley_gap = cfg.get("volley_gap", 3.0)
