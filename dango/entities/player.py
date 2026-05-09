@@ -4,14 +4,14 @@ from dango.entities.stick import Stick
 
 
 class Player:
-    def __init__(self, x, y, day):
+    def __init__(self, x, y, day, add_stick):
         self.x = float(x)
         self.y = float(y)
         self.w = 40
         self.h = 60
         self.speed = PLAYER_SPEED
         self.scramble_controls_till = pygame.time.get_ticks() / 1000.0 - 1.0  # time until which controls are scrambled; initialized to past time
-        self.stick = Stick(self._on_complete_stick, day)
+        self.stick = Stick(add_stick, day)
         # visual parry effects: list of dicts {dir, t, dur}
         self._parries = []
         # visual stab effects: list of dicts {t, dur}
@@ -63,9 +63,6 @@ class Player:
                     self._stabs.remove(s)
                 except ValueError:
                     pass
-
-    def _on_complete_stick(self, color_keys):
-        pass # TODO make this show up on the UI as a complete stick, and try to give it
 
     def compute_parry_rect(self, direction, prog=0.0):
         """Return the parry hitbox Rect for `direction` at progress `prog` (0..1)."""
