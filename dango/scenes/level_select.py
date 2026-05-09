@@ -33,7 +33,7 @@ class LevelSelect:
             day = idx + 1
             color = (255, 255, 100) if idx == self.selected else (180, 180, 180)
             text = self.font_item.render(f"Day {day}", True, color)
-            screen.blit(text, (SCREEN_W // 2 - 80, 300 + idx * 60))
+            screen.blit(text, (SCREEN_W // 2 - 80, 230 + idx * 60))
 
         hint = self.font_item.render("W/S to select   Enter to start", True, (120, 120, 120))
-        screen.blit(hint, (SCREEN_W // 2 - 220, 560))
+        screen.blit(hint, (SCREEN_W // 2 - 220, 600))

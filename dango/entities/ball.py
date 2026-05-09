@@ -1,5 +1,6 @@
 import math
 import pygame
+from dango.entities.player import Player
 from dango.settings import AVOIDANCE_ACCEL, AVOIDANCE_SPEED_MULTIPLIER, BALL_RADIUS, BALL_COLORS, BALL_SPEED, BALL_VALUE, FIELD_TOP, FIELD_BOTTOM, GREEN_ACCEL, GREEN_MID_THRESHOLD, HOMING_ACCEL, HOMING_SPEED_MULTIPLIER
 
 
@@ -161,9 +162,8 @@ class WasabiHazard(Ball):
     def __init__(self, x, y, angle_rad=math.pi):
         super().__init__(x, y, angle_rad, color_key="wasabi")
 
-    def on_caught(self, player):
-        # scramble effect placeholder
-        pass
+    def on_caught(self, player: Player):
+        player.scramble_controls_till = pygame.time.get_ticks() / 1000.0 + WASABI_SCRAMBLE_DURATION  # scramble controls
 
 
 class CoalHazard(Ball):

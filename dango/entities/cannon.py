@@ -2,7 +2,7 @@ import math
 import random
 import pygame
 from dango.entities.ball import PinkBall, WhiteBall, GreenBall, BrownBall, WasabiHazard, CoalHazard, YellowBall
-from dango.settings import SCREEN_W
+from dango.settings import COAL_SPREAD_OFFSET, SCREEN_W
 
 
 class Cannon:
@@ -32,28 +32,32 @@ class Cannon:
             # fire ball from queue
             c = queue.pop()
             if c:
-                spawned.append(self._spawn_ball(c))
+                spawned.extend(self._spawn_balls(c))
         return spawned
 
-    def _spawn_ball(self, color_key):
+    def _spawn_balls(self, color_key):
         # spawn at cannon position and set velocity based on angle
         rad = math.radians(self.angle)
+        balls = []
         if color_key == "pink":
-            ball = PinkBall(self.x, self.y, rad)
+            balls.append(PinkBall(self.x, self.y, rad))
         elif color_key == "white":
-            ball = WhiteBall(self.x, self.y, rad)
+            balls.append(WhiteBall(self.x, self.y, rad))
         elif color_key == "green":
-            ball = GreenBall(self.x, self.y, rad)
+            balls.append(GreenBall(self.x, self.y, rad))
         elif color_key == "yellow":
-            ball = YellowBall(self.x, self.y, rad)
+            balls.append(YellowBall(self.x, self.y, rad))
         elif color_key == "brown":
-            ball = BrownBall(self.x, self.y, rad)
+            balls.append(BrownBall(self.x, self.y, rad))
         elif color_key == "wasabi":
-            ball = WasabiHazard(self.x, self.y, rad)
+            balls.append(WasabiHazard(self.x, self.y, rad))
         elif color_key == "coal":
-            ball = CoalHazard(self.x, self.y, rad)
+            offset_rad = math.radians(COAL_SPREAD_OFFSET)
+            balls.append(CoalHazard(self.x, self.y, rad))
+            balls.append(CoalHazard(self.x, self.y, rad + offset_rad))
+            balls.append(CoalHazard(self.x, self.y, rad - offset_rad))
 
-        return ball
+        return balls
 
     def draw(self, screen):
         # simple cannon base

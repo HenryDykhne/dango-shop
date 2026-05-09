@@ -4,6 +4,9 @@ import random
 SCREEN_W, SCREEN_H = 1280, 720
 FPS = 60
 
+# player
+PLAYER_SPEED = 300.0
+
 # Play field
 FIELD_TOP = 100
 FIELD_BOTTOM = 620
@@ -35,9 +38,19 @@ BALL_SPEED = {
     "coal":   260,
 }
 
+# Endlag
+PARRY_ENDLAG_DURATION = 0.4
+STAB_ENDLAG_DURATION = 0.4
+
 # Green ball behavior
 GREEN_ACCEL = 600.0
 GREEN_MID_THRESHOLD = 50.0
+
+# hazard behavior
+WASABI_SCRAMBLE_DURATION = 3.0
+COAL_SPREAD_OFFSET = 15.0  # degrees of spread for coal balls
+
+
 
 # Homing Behavior for yellow and brown balls
 AVOIDANCE_SPEED_MULTIPLIER = 1000.0
@@ -84,6 +97,13 @@ DAYS = [
         "bag":        {"pink": 4, "white": 4, "green": 3, "yellow": 2, "brown": 2, "wasabi": 1},
         "stick_size": 4,
         "quota":      3500,
+        "volley_gap": 2.5,
+    },
+    {
+        "bag":        {"pink":4, "white":4, "green":3, "yellow":2, "brown":2, "wasabi":1, "coal":1},
+        #"bag": {"pink":4, "white":4, "green":3, "yellow":2, "brown":2, "orange":2, "wasabi":1, "coal":1}, #actual
+        "stick_size": 4,
+        "quota":      4000,
         "volley_gap": 2.5,
     },
 ]
