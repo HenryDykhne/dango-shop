@@ -1,7 +1,6 @@
 import pygame
+from dango.settings import FIELD_TOP, FIELD_BOTTOM, PLAYER_SPEED
 from dango.entities.stick import Stick
-from dango.settings import FIELD_TOP, FIELD_BOTTOM
-
 
 class Player:
     def __init__(self, x, y, day, add_stick):
@@ -9,8 +8,11 @@ class Player:
         self.y = float(y)
         self.w = 40
         self.h = 60
-        self.speed = 300.0
+        self.speed = PLAYER_SPEED
+        self.scramble_controls_till = pygame.time.get_ticks() / 1000.0 - 1.0  # time until which controls are scrambled; initialized to past time
+
         self.stick = Stick(add_stick, day)
+
         # visual parry effects: list of dicts {dir, t, dur}
         self._parries = []
         # visual stab effects: list of dicts {t, dur}
@@ -32,6 +34,11 @@ class Player:
             vy = -1
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             vy = 1
+
+        if self.scramble_controls_till > pygame.time.get_ticks() / 1000.0:
+            vx = -vx
+            vy = -vy
+
         return vx, vy
 
     def update(self, dt):
