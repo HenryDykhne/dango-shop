@@ -16,7 +16,7 @@ class Stick:
     def draw(self, screen, x_offset, y_offset):
         # TODO Draw the stick here when we have the sprite for it
         radius = 6
-        dx, dy = 0, radius*2 + 1
+        dx, dy = 0, -radius*2 - 1
         for i, colorName in enumerate(self.ball_keys):
             color = BALL_COLORS[colorName]
             x = x_offset + dx*i
