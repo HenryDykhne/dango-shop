@@ -1,7 +1,7 @@
 import math
 import pygame
 import random
-from dango.settings import DAYS
+from dango.settings import DAYS, BALL_COLORS
 
 
 class Customer:
@@ -28,9 +28,9 @@ class Customer:
 
         # generate what the customer wants
         self.demand = []
-        day_config = DAYS[day]
+        day_config = DAYS[day - 1]
         for _ in range(day_config['stick_size']):
-            options = list(day_config['bag'].values())
+            options = list(day_config['bag'].keys())
             while (thing := random.choice(options)) in ['wasabi', 'coal']:
                 pass
             self.demand.append(random.choice(options))
@@ -53,18 +53,18 @@ class Customer:
             self.phase += 1
 
         if self.phase == Customer.ENTERING:
-            self.y = 720 - 180 * ratio
+            self.y = 720 + self.radius - 90 * ratio
             self.alpha = int(255 * ratio)
             self.red = 0
         elif self.phase == Customer.WAITING:
-            self.y = 720 - 180
+            self.y = 720 + self.radius - 90
             self.alpha = 255
             self.red = int(255 * ratio)
         elif self.phase == Customer.LEAVING:
-            self.y = 720 - 180*(1-ratio)
+            self.y = 720 + self.radius - 90*(1-ratio)
             self.alpha = int(255*(1 - ratio))
         else:
-            self.y = 720
+            self.y = 720 + self.radius
             self.alpha = 0
 
 
@@ -73,6 +73,13 @@ class Customer:
             color = (255, 255 - self.red, 255 - self.red, self.alpha)
             pygame.draw.circle(screen, color, (int(self.xOffset), int(self.y)), self.radius)
 
+            for i, colorName in enumerate(self.demand):
+                color = BALL_COLORS[colorName]
+                color = (color[0], color[1], color[2], self.alpha)
+                x = self.xOffset + self.radius + 10
+                y = self.y - i * 16
+
+                pygame.draw.circle(screen, color, (x, y), 7)
 
 class Customers:
     MAX_CUSTOMERS = 8
@@ -101,7 +108,7 @@ class Customers:
             random.shuffle(self.free_stalls)
             i = self.free_stalls.pop()
 
-            offset = int(1080*( (i + 1) / (Customers.MAX_CUSTOMERS + 2) ))
+            offset = int(1080*( (i + 1) / (Customers.MAX_CUSTOMERS + 1) ))
             self.stalls[i] = Customer(self.day, offset)
 
             self._reset_cooldown()
