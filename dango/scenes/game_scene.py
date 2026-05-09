@@ -1,7 +1,7 @@
 import pygame
 from dango.entities.player import Player
 from dango.entities.cannon import Cannon
-from dango.systems.bag import Bag
+from dango.systems.bag import Bag, Queue
 from dango.settings import DAYS
 from dango.ui.hud import HUD
 
@@ -11,6 +11,8 @@ class GameScene:
         self.day = day
         cfg = DAYS[day-1]
         self.bag = Bag(cfg["bag"])
+        # the cannon will feed from this queue; it is prefilled from the bag
+        self.queue = Queue(self.bag, size=8)
         self.player = Player(200, 400)
         self.cannon = Cannon()
         self.balls = []
@@ -27,11 +29,24 @@ class GameScene:
                 if event.key == pygame.K_SPACE:
                     # stab action
                     self.player.stab(self.balls)
+                if event.key == pygame.K_h:
+                    # parry up: jump colliding ball to second place in the queue
+                    for b in list(self.balls):
+                        if b.alive and self.player.rect.colliderect(b.get_rect()):
+                            # insert into second position (index 1)
+                            self.queue.insert_at(1, getattr(b, 'color_key', None))
+                            b.alive = False
+                if event.key == pygame.K_j:
+                    # parry down: send colliding ball back to the hopper bag
+                    for b in list(self.balls):
+                        if b.alive and self.player.rect.colliderect(b.get_rect()):
+                            self.bag.add(getattr(b, 'color_key', None))
+                            b.alive = False
 
     def update(self, dt, manager):
         self.player.update(dt)
         # update cannon (it will decide when to fire based on its own timer)
-        spawned = self.cannon.update(dt, self.bag, self.volley_gap)
+        spawned = self.cannon.update(dt, self.queue, self.volley_gap)
         if spawned:
             self.balls.extend(spawned)
 

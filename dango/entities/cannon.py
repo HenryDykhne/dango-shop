@@ -14,12 +14,12 @@ class Cannon:
         self.time = 0.0
         self._since = 0.0
 
-    def update(self, dt, bag, volley_gap):
+    def update(self, dt, queue, volley_gap):
         """Advance cannon angle and optionally fire when timer passes.
 
-        If `bag` and `volley_gap` are provided, the cannon will draw and
-        spawn a ball every `volley_gap` seconds. Returns a list of spawned
-        balls (may be empty).
+        If `queue` and `volley_gap` are provided, the cannon will pop from
+        the queue and spawn a ball every `volley_gap` seconds. Returns a
+        list of spawned balls (may be empty).
         """
         self.time += dt
         # oscillate angle slightly
@@ -29,9 +29,10 @@ class Cannon:
         self._since += dt
         if self._since >= volley_gap:
             self._since -= volley_gap
-            # fire ball
-            c = bag.draw()
-            spawned.append(self._spawn_ball(c))
+            # fire ball from queue
+            c = queue.pop()
+            if c:
+                spawned.append(self._spawn_ball(c))
         return spawned
 
     def _spawn_ball(self, color_key):

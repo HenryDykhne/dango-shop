@@ -27,7 +27,7 @@ Dango Shop is a 2D action game set in a traditional Japanese sweet shop. The pla
 
 | Action | Controller (Xbox) | Keyboard | Description |
 | :---- | :---- | :---- | :---- |
-| **Move** | Left Stick | W / S | Move character up and down |
+| **Move** | Left Stick | W A S D | Move character |
 | **Stab** | B | Space | Catch incoming dango ball onto stick |
 | **Parry Up** | Y | H | Send ball to priority queue (jumps to front) |
 | **Parry Down** | A | J | Send ball back to hopper bag (removes from play) |

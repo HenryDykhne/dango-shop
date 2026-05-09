@@ -14,13 +14,15 @@ class Ball:
     value = 0
     is_hazard = False
 
-    def __init__(self, x, y, angle_rad=math.pi, color_key=None):
+    def __init__(self, x, y, angle_rad, color_key):
         self.x = float(x)
         self.y = float(y)
         self.origin_y = y
         self.radius = BALL_RADIUS
         self.alive = True
 
+        # preserve the color key for gameplay systems (queue, parry, bag)
+        self.color_key = color_key
         self.color = BALL_COLORS.get(color_key, self.color)
         self.value = BALL_VALUE.get(color_key, 0)
         # set per-color initial speed if available
