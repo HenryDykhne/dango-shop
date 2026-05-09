@@ -2,6 +2,7 @@ import pygame
 from dango.entities.player import Player
 from dango.entities.cannon import Cannon
 from dango.entities.Customers import Customers
+from dango.entities.dangoHolders import DangoHolders
 from dango.systems.bag import Bag, Queue
 from dango.settings import DAYS
 from dango.ui.hud import HUD
@@ -14,9 +15,11 @@ class GameScene:
         self.bag = Bag(cfg["bag"])
         # the cannon will feed from this queue; it is prefilled from the bag
         self.queue = Queue(self.bag, size=8)
-        self.player = Player(200, 400, day=day)
+        self.dango_holders = DangoHolders()
+        self.player = Player(200, 400, day=day, add_stick=self.dango_holders.add_stick)
         self.cannon = Cannon()
         self.balls = []
+        
         self.volley_gap = cfg.get("volley_gap", 3.0)
         self.font = pygame.font.SysFont("arial", 24)
         self.customers = Customers(self.day)
@@ -93,5 +96,6 @@ class GameScene:
         self.player.draw(screen)
         self.cannon.draw(screen)
         self.customers.draw(screen)
+        self.dango_holders.draw(screen)
 
         self.hud.draw(screen)
