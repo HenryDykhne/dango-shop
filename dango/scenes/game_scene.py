@@ -1,6 +1,7 @@
 import pygame
 from dango.entities.player import Player
 from dango.entities.cannon import Cannon
+from dango.entities.Customers import Customers
 from dango.systems.bag import Bag, Queue
 from dango.settings import DAYS
 from dango.ui.hud import HUD
@@ -18,6 +19,7 @@ class GameScene:
         self.balls = []
         self.volley_gap = cfg.get("volley_gap", 3.0)
         self.font = pygame.font.SysFont("arial", 24)
+        self.customers = Customers(self.day)
         self.hud = HUD(self)
         # visual indicator for a recent parry-up: dict with t,dur,slot
         self.parry_indicator = None
@@ -78,6 +80,8 @@ class GameScene:
                 except ValueError:
                     pass
 
+        self.customers.update(dt)
+
     def draw(self, screen):
         # draw field background
         pygame.draw.rect(screen, (60, 40, 20), (0, 80, 1280, 560))
@@ -87,5 +91,6 @@ class GameScene:
 
         self.player.draw(screen)
         self.cannon.draw(screen)
+        self.customers.draw(screen)
 
         self.hud.draw(screen)
