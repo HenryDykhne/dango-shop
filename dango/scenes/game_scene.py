@@ -71,7 +71,8 @@ class GameScene:
             self.balls.extend(spawned)
 
         for b in list(self.balls):
-            b.update(dt)
+            # pass the full player object so balls can react to player state
+            b.update(dt, self.player)
             if not b.alive:
                 try:
                     self.balls.remove(b)

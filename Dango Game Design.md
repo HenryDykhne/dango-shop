@@ -98,11 +98,11 @@ Each day uses a fixed bag definition. The bag is shuffled and drawn from. When e
 
 | Day | Bag Contents | Stick Size |
 | :---- | :---- | :---- |
-| **1** | Pink ×4, White ×4 | 2-3 |
+| **1** | Pink ×4, White ×4 | 2 |
 | **2** | Pink ×4, White ×4, Green ×3 | 3 |
-| **3** | Pink ×4, White ×4, Green ×3, Yellow ×2, Wasabi ×1 | 3-4 |
-| **4** | Pink ×4, White ×4, Green ×3, Yellow ×2, Brown ×2, Coal ×1 | 4 |
-| **5** | Pink ×4, White ×4, Green ×3, Yellow ×2, Brown ×2, Orange ×2, Wasabi ×1, Coal ×1 | 4-5 |
+| **3** | Pink ×4, White ×4, Green ×3, Yellow ×2, Wasabi ×1 | 3 |
+| **4** | Pink ×4, White ×4, Green ×3, Yellow ×2, Brown ×2, Wasabi ×1 | 4 |
+| **5** | Pink ×4, White ×4, Green ×3, Yellow ×2, Brown ×2, Orange ×2, Wasabi ×1, Coal ×1 | 4 |
 | **6** | Pink ×4, White ×4, Green ×3, Yellow ×2, Brown ×2, Orange ×2, Purple ×2, Wasabi ×1, Coal ×1 | 5 |
 | **7** | Pink ×4, White ×4, Green ×3, Yellow ×2, Brown ×2, Orange ×2, Purple ×2, Black ×1, Wasabi ×1, Coal ×1 | 5 |
 

@@ -1,6 +1,6 @@
 import math
 import pygame
-from dango.settings import BALL_RADIUS, BALL_COLORS, BALL_SPEED, BALL_VALUE, FIELD_TOP, FIELD_BOTTOM, GREEN_ACCEL, GREEN_MID_THRESHOLD
+from dango.settings import AVOIDANCE_ACCEL, AVOIDANCE_SPEED_MULTIPLIER, BALL_RADIUS, BALL_COLORS, BALL_SPEED, BALL_VALUE, FIELD_TOP, FIELD_BOTTOM, GREEN_ACCEL, GREEN_MID_THRESHOLD, HOMING_ACCEL, HOMING_SPEED_MULTIPLIER
 
 
 class Ball:
@@ -32,18 +32,13 @@ class Ball:
         self.vx = math.cos(angle_rad) * self.speed
         self.vy = math.sin(angle_rad) * self.speed
 
-    def update(self, dt):
-        # default: straight-line motion
+    def update(self, dt, player):
+        # default: straight-line motion (accept optional player object)
         self.x += self.vx * dt
         self.y += self.vy * dt
 
         # bounce off top/bottom
-        if self.y - self.radius <= FIELD_TOP:
-            self.y = FIELD_TOP + self.radius
-            self.vy *= -1
-        if self.y + self.radius >= FIELD_BOTTOM:
-            self.y = FIELD_BOTTOM - self.radius
-            self.vy *= -1
+        self._bounce()
 
 
     def draw(self, screen):
@@ -51,6 +46,15 @@ class Ball:
 
     def get_rect(self):
         return pygame.Rect(int(self.x - self.radius), int(self.y - self.radius), self.radius * 2, self.radius * 2)
+
+    def _bounce(self):
+        """Bounce the ball off the playfield top/bottom and flip vertical velocity."""
+        if self.y - self.radius <= FIELD_TOP:
+            self.y = FIELD_TOP + self.radius
+            self.vy *= -1
+        if self.y + self.radius >= FIELD_BOTTOM:
+            self.y = FIELD_BOTTOM - self.radius
+            self.vy *= -1
 
     def on_parried_up(self):
         pass
@@ -80,7 +84,7 @@ class GreenBall(Ball):
         # threshold (px) around midpoint where we keep accelerating in current vy direction
         self.mid_threshold = GREEN_MID_THRESHOLD
 
-    def update(self, dt):
+    def update(self, dt, player):
         # forward motion
         self.x += self.vx * dt
 
@@ -100,16 +104,56 @@ class GreenBall(Ball):
         self.y += self.vy * dt
 
         # bounce off top/bottom
-        if self.y - self.radius <= FIELD_TOP:
-            self.y = FIELD_TOP + self.radius
-            self.vy *= -1
-        if self.y + self.radius >= FIELD_BOTTOM:
-            self.y = FIELD_BOTTOM - self.radius
-            self.vy *= -1
+        self._bounce()
 
-        if self.x < -200:
-            self.alive = False
+class BrownBall(Ball):
+    def __init__(self, x, y, angle_rad=math.pi):
+        super().__init__(x, y, angle_rad, color_key="brown")
 
+    def update(self, dt, player):
+         # forward motion
+        self.x += self.vx * dt
+
+        # if we have the player's object, accelerate vertically away from them to dodge them.
+
+        # scale speed by distance (closer -> faster)
+        targetvy = AVOIDANCE_SPEED_MULTIPLIER * (1 - (abs(self.y - player.y) / (FIELD_BOTTOM - FIELD_TOP)))
+        if self.y < player.y:
+            targetvy = -targetvy
+
+        if targetvy > self.vy:
+            self.vy += AVOIDANCE_ACCEL * dt
+        else:
+            self.vy -= AVOIDANCE_ACCEL * dt
+
+        # apply vertical velocity
+        self.y += self.vy * dt
+
+        # bounce off top/bottom
+        self._bounce()
+
+class YellowBall(Ball):
+    def __init__(self, x, y, angle_rad=math.pi):
+        super().__init__(x, y, angle_rad, color_key="yellow")
+
+    def update(self, dt, player):
+        # forward motion
+        self.x += self.vx * dt
+
+        # if we have the player's object, accelerate vertically towards them to 'target' them.
+
+        # scale speed by distance (closer -> slower)
+        targetvy = HOMING_SPEED_MULTIPLIER * (player.y - self.y) / (FIELD_BOTTOM - FIELD_TOP)
+        if targetvy > self.vy:
+            self.vy += HOMING_ACCEL * dt
+        else:
+            self.vy -= HOMING_ACCEL * dt
+
+        # apply vertical velocity
+        self.y += self.vy * dt
+
+        # bounce off top/bottom
+        self._bounce()
 
 class WasabiHazard(Ball):
     is_hazard = True
