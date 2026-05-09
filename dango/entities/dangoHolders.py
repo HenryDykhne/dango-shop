@@ -11,7 +11,7 @@ class DangoHolders:
         self.sticks = self.sticks[-9:] + [stick]
     
     def draw(self, screen):
-        radius = 4
+        radius = 10
         for i in range(len(self.sticks)):
             stick = self.sticks[i]
             for j in range(len(stick)):
@@ -19,5 +19,5 @@ class DangoHolders:
                 color = BALL_COLORS[color_key]
 
                 x = 540 + i * (radius*2 + 10)
-                y = 5 + radius + j*(2*radius + 1)
+                y = 20 + radius + j*(2*radius + 1)
                 pygame.draw.circle(screen, color, (x, y), radius)
