@@ -26,8 +26,8 @@ BALL_SPEED = {
     "pink":   200,
     "white":  340,
     "green":  260,
-    "yellow": 180,
-    "brown":  180,
+    "yellow": 280,
+    "brown":  280,
     "orange": 220,
     "purple": 260,
     "black":  260,
@@ -38,6 +38,12 @@ BALL_SPEED = {
 # Green ball behavior
 GREEN_ACCEL = 600.0
 GREEN_MID_THRESHOLD = 50.0
+
+# Homing Behavior for yellow and brown balls
+AVOIDANCE_SPEED_MULTIPLIER = 1000.0
+AVOIDANCE_ACCEL = 400.0
+HOMING_SPEED_MULTIPLIER = 1000.0
+HOMING_ACCEL = 600.0
 
 # Yen
 BALL_VALUE = {
@@ -69,9 +75,35 @@ DAYS = [
         "volley_gap": 2.5,
     },
     {
-        "bag":        {"pink": 4, "white": 4, "green": 3, "wasabi": 1},
+        "bag":        {"pink": 4, "white": 4, "green": 3, "yellow": 2, "wasabi": 1},
         "stick_size": 3,
         "quota":      3000,
         "volley_gap": 2.5,
     },
+    {
+        "bag":        {"pink": 4, "white": 4, "green": 3, "yellow": 2, "brown": 2, "wasabi": 1},
+        "stick_size": 4,
+        "quota":      3500,
+        "volley_gap": 2.5,
+    },
 ]
+
+# Additional days (commented out):
+# {
+#     "bag": {"pink":4, "white":4, "green":3, "yellow":2, "brown":2, "orange":2, "wasabi":1, "coal":1},
+#     "stick_size": 4,
+#     "quota": 4000,
+#     "volley_gap": 2.5,
+# },
+# {
+#     "bag": {"pink":4, "white":4, "green":3, "yellow":2, "brown":2, "orange":2, "purple":2, "wasabi":1, "coal":1},
+#     "stick_size": 5,
+#     "quota": 5000,
+#     "volley_gap": 2.5,
+# },
+# {
+#     "bag": {"pink":4, "white":4, "green":3, "yellow":2, "brown":2, "orange":2, "purple":2, "black":1, "wasabi":1, "coal":1},
+#     "stick_size": 5,
+#     "quota": 5500,
+#     "volley_gap": 2.5,
+# },

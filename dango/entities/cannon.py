@@ -1,7 +1,7 @@
 import math
 import random
 import pygame
-from dango.entities.ball import PinkBall, WhiteBall, GreenBall, WasabiHazard, CoalHazard
+from dango.entities.ball import PinkBall, WhiteBall, GreenBall, BrownBall, WasabiHazard, CoalHazard, YellowBall
 from dango.settings import SCREEN_W
 
 
@@ -44,6 +44,10 @@ class Cannon:
             ball = WhiteBall(self.x, self.y, rad)
         elif color_key == "green":
             ball = GreenBall(self.x, self.y, rad)
+        elif color_key == "yellow":
+            ball = YellowBall(self.x, self.y, rad)
+        elif color_key == "brown":
+            ball = BrownBall(self.x, self.y, rad)
         elif color_key == "wasabi":
             ball = WasabiHazard(self.x, self.y, rad)
         elif color_key == "coal":
