@@ -114,8 +114,6 @@ class Customers:
                 if customer.isGone():
                     self.stalls[i] = None
                     self.free_stalls.append(i)
-        
-        print(self.cooldown, self.stalls)
 
     def draw(self, screen):
         for i in range(Customers.MAX_CUSTOMERS):
