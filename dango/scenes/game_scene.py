@@ -1,0 +1,56 @@
+import pygame
+from dango.entities.player import Player
+from dango.entities.cannon import Cannon
+from dango.systems.bag import Bag
+from dango.settings import DAYS
+from dango.ui.hud import HUD
+
+
+class GameScene:
+    def __init__(self, day=1):
+        self.day = day
+        cfg = DAYS[day-1]
+        self.bag = Bag(cfg["bag"])
+        self.player = Player(200, 400)
+        self.cannon = Cannon()
+        self.balls = []
+        self.volley_gap = cfg.get("volley_gap", 3.0)
+        self.font = pygame.font.SysFont("arial", 24)
+        self.hud = HUD(self)
+
+    def handle_events(self, events, manager):
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    from dango.scenes.level_select import LevelSelect
+                    manager.switch(LevelSelect())
+                if event.key == pygame.K_SPACE:
+                    # stab action
+                    self.player.stab(self.balls)
+
+    def update(self, dt, manager):
+        self.player.update(dt)
+        # update cannon (it will decide when to fire based on its own timer)
+        spawned = self.cannon.update(dt, self.bag, self.volley_gap)
+        if spawned:
+            self.balls.extend(spawned)
+
+        for b in list(self.balls):
+            b.update(dt)
+            if not b.alive:
+                try:
+                    self.balls.remove(b)
+                except ValueError:
+                    pass
+
+    def draw(self, screen):
+        # draw field background
+        pygame.draw.rect(screen, (60, 40, 20), (0, 80, 1280, 560))
+
+        for b in self.balls:
+            b.draw(screen)
+
+        self.player.draw(screen)
+        self.cannon.draw(screen)
+
+        self.hud.draw(screen)
