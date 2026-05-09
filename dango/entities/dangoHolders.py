@@ -15,7 +15,7 @@ class DangoHolders:
         for i in range(len(self.sticks)):
             stick = self.sticks[i]
             for j in range(len(stick)):
-                color_key = stick[j]
+                color_key = stick[::-1][j]
                 color = BALL_COLORS[color_key]
 
                 x = 540 + i * (radius*2 + 10)

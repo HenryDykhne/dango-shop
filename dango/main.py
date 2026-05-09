@@ -7,11 +7,12 @@ except Exception:
 
 from dango.scene_manager import SceneManager
 from dango.scenes.level_select import LevelSelect
-from dango.settings import SCREEN_W, SCREEN_H, FPS
+from dango.settings import SCREEN_W, SCREEN_H, FPS, init_settings
 
 
 def run():
     pygame.init()
+
     screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
     pygame.display.set_caption("Dango Shop - Prototype")
     clock = pygame.time.Clock()
@@ -39,4 +40,5 @@ def run():
 
 
 if __name__ == "__main__":
+    init_settings()
     run()

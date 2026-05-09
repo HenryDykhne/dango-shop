@@ -1,7 +1,7 @@
 import math
 import pygame
 import random
-from dango.settings import DAYS, BALL_COLORS
+from dango.settings import DAYS, BALL_COLORS, add_score
 
 
 class Customer:
@@ -127,6 +127,8 @@ class Customers:
         for stick in dango_holders.sticks:
             if self.offer(stick):
                 used_stick = stick
+                # TODO figure out how much score to give
+                add_score(100)
         if used_stick:
             dango_holders.sticks.remove(used_stick)
 
