@@ -16,6 +16,4 @@ class Bag:
     def draw(self):
         if not self.pool:
             self._rebuild()
-        if not self.pool:
-            return None
         return self.pool.pop()

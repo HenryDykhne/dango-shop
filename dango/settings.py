@@ -14,6 +14,11 @@ BALL_COLORS = {
     "pink":   (255, 182, 193),
     "white":  (240, 240, 240),
     "green":  (144, 238, 144),
+    "yellow": (255, 215, 0),
+    "brown":  (160, 82, 45),
+    "orange": (255, 140, 0),
+    "purple": (147, 112, 219),
+    "black":  (24, 24, 24),
     "wasabi": (50, 205, 50),
     "coal":   (200, 80, 0),
 }
@@ -21,19 +26,29 @@ BALL_SPEED = {
     "pink":   200,
     "white":  340,
     "green":  260,
+    "yellow": 180,
+    "brown":  180,
+    "orange": 220,
+    "purple": 260,
+    "black":  260,
     "wasabi": 260,
     "coal":   260,
 }
 
 # Green ball behavior
-GREEN_ACCEL = 700.0
-GREEN_MID_THRESHOLD = 35.0
+GREEN_ACCEL = 600.0
+GREEN_MID_THRESHOLD = 50.0
 
 # Yen
 BALL_VALUE = {
     "pink":  50,
     "white": 50,
     "green": 50,
+    "yellow": 100,
+    "brown":  100,
+    "orange": 150,
+    "purple": 150,
+    "black":  250,
     "wasabi": 0,
     "coal":  0,
 }
