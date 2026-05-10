@@ -5,8 +5,9 @@ from dango.entities.cannon import Cannon
 from dango.entities.Customers import Customers
 from dango.entities.dangoHolders import DangoHolders
 from dango.systems.bag import Bag, Queue
-from dango.settings import BACKSTOP_WIDTH, DAYS, FIELD_BOTTOM, FIELD_TOP, SCREEN_H, SCREEN_W, reset_score_info, PARRY_ENDLAG_DURATION, STAB_ENDLAG_DURATION
+from dango.settings import BACKSTOP_WIDTH, DAYS, FIELD_BOTTOM, FIELD_TOP, GAME_LENGTH, SCREEN_H, SCREEN_W, reset_score_info, PARRY_ENDLAG_DURATION, STAB_ENDLAG_DURATION, current_score
 from dango.ui.hud import HUD
+
 
 
 class GameScene:
@@ -27,6 +28,7 @@ class GameScene:
         self.hud = HUD(self)
         # visual indicator for a recent parry-up: dict with t,dur,slot
         self.parry_indicator = None
+        self.time_remaining = GAME_LENGTH
 
         reset_score_info()
 
@@ -44,8 +46,8 @@ class GameScene:
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    from dango.scenes.level_select import LevelSelect
-                    manager.switch(LevelSelect())
+                     from dango.scenes.level_select import LevelSelect
+                     manager.switch(LevelSelect())
                 if event.key == pygame.K_SPACE \
                     and (self.last_stab_time is None or (current_time - self.last_stab_time) > STAB_ENDLAG_DURATION):
                     self.last_stab_time = current_time
@@ -83,6 +85,16 @@ class GameScene:
                     self.player.start_parry('down')
 
     def update(self, dt, manager):
+        # Move to endgame screen after time has elapsed
+        time = pygame.time.get_ticks() / 1000.0
+        time_elapsed = time - manager.scene_switch_time
+        self.time_remaining = max(0, GAME_LENGTH - time_elapsed)
+        if time_elapsed > GAME_LENGTH:
+            from dango.scenes.lose_scene import QuotaFailScene
+            manager.switch(QuotaFailScene(current_score(), DAYS[self.day-1]['quota']))
+        if current_score() >= DAYS[self.day-1]['quota']:
+            from dango.scenes.win_scene import QuotaSucceedScene
+            manager.switch(QuotaSucceedScene(current_score(), DAYS[self.day-1]['quota']))
         self.player.update(dt, self.balls)
         # advance parry indicator timer
         if self.parry_indicator is not None:

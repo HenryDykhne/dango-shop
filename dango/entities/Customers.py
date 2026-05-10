@@ -12,7 +12,7 @@ class Customer:
 
     TIMINGS = {
         ENTERING: 1,
-        WAITING: 10,
+        WAITING: 16,
         LEAVING: 1,
         GONE: 1e100,
     }
@@ -25,6 +25,7 @@ class Customer:
         self.red = 0
         self.alpha = 0
         self.radius = 32
+        self.fed = False
 
         # generate what the customer wants
         self.demand = []
@@ -39,6 +40,7 @@ class Customer:
         if self.phase == Customer.WAITING and stick == self.demand:
             self.age = 0.0
             self.phase = Customer.LEAVING
+            self.fed = True
             return True
         return False
 
@@ -51,7 +53,7 @@ class Customer:
         if self.age > Customer.TIMINGS[self.phase]:
             # In the case they ran out of patience and left
             if self.phase == Customer.WAITING:
-                add_score(-50)
+                add_score(-5)
             self.age = 0
             self.phase += 1
 
@@ -73,7 +75,10 @@ class Customer:
 
     def draw(self, screen):
         if self.phase != Customer.GONE:
-            color = (255, 255 - self.red, 255 - self.red, self.alpha)
+            if self.fed:
+                color = (95, 255, 89, 1)
+            else:
+                color = (255, 255 - self.red, 255 - self.red, self.alpha)
             pygame.draw.circle(screen, color, (int(self.xOffset), int(self.y)), self.radius)
 
             for i, colorName in enumerate(self.demand):
@@ -85,8 +90,8 @@ class Customer:
                 pygame.draw.circle(screen, color, (x, y), 7)
 
 class Customers:
-    MAX_CUSTOMERS = 8
-    COOLDOWNS = [2] #[12, 32, 14, 10, 25, 24]
+    MAX_CUSTOMERS = 5
+    COOLDOWNS = [6] #[12, 32, 14, 10, 25, 24]
 
     def __init__(self, day):
         self.stalls = [None]*Customers.MAX_CUSTOMERS
@@ -98,7 +103,9 @@ class Customers:
         self.cooldown = random.choice(Customers.COOLDOWNS)
 
     def _stick_value(self, stick):
-        return sum(BALL_VALUE[color_key] for color_key in stick)
+        value = sum(BALL_VALUE[color_key] for color_key in stick)
+        value += 10 * (len(stick) ** 2)  # bonus for more balls on the stick
+        return value
 
     def offer(self, stick):
         for customer in self.stalls:

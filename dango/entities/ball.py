@@ -1,7 +1,7 @@
 import math
 import pygame
 from dango.entities.player import Player
-from dango.settings import AVOIDANCE_ACCEL, AVOIDANCE_SPEED_MULTIPLIER, BACKSTOP_WIDTH, BALL_RADIUS, BALL_COLORS, BALL_SPEED, BALL_VALUE, FIELD_TOP, FIELD_BOTTOM, GREEN_ACCEL, GREEN_MID_THRESHOLD, HOMING_ACCEL, HOMING_SPEED_MULTIPLIER, WASABI_SCRAMBLE_DURATION, add_score
+from dango.settings import AVOIDANCE_ACCEL, AVOIDANCE_SPEED_MULTIPLIER, BACKSTOP_WIDTH, BALL_RADIUS, BALL_COLORS, BALL_SPEED, BALL_VALUE, FIELD_TOP, FIELD_BOTTOM, GREEN_ACCEL, GREEN_MID_THRESHOLD, HOMING_ACCEL, HOMING_SPEED_MULTIPLIER, ORANGE_ACCELERATION, ORANGE_DECELERATION, WASABI_SCRAMBLE_DURATION, add_score
 
 
 class Ball:
@@ -68,12 +68,12 @@ class Ball:
 
     def on_hit(self, player):
         self.alive = False
-        add_score(-50)
+        add_score(-20)
 
     def on_hit_backstop(self):
         # this should be a penalty in score
         self.alive = False
-        add_score(-50)
+        add_score(-10)
 
     def on_parried_up(self):
         pass
@@ -186,18 +186,26 @@ class YellowBall(Ball):
 class OrangeBall(Ball):
     def __init__(self, x, y, angle_rad=math.pi):
         super().__init__(x, y, angle_rad, color_key="orange")
-        self.acceleration = -150
-    
-    def update(self, dt, player):
-        super().update(dt, player)
-        prev_vx = self.vx
+        self.reversing = False
 
-        self.vx += self.acceleration * dt * math.cos(self.angle_rad)
-        self.vy -= math.copysign(1, self.vy) * self.acceleration * dt * math.cos(self.angle_rad)
+    def update(self, dt, player):
+        speed = math.sqrt(self.vx**2 + self.vy**2)
         
-        # flip speed once we are slow enough
-        if self.acceleration < 0 and math.sqrt(self.vx**2 + self.vy**2) < 30:
-            self.acceleration = abs(self.acceleration)
+        if not self.reversing:
+            speed -= ORANGE_DECELERATION * dt
+            if speed <= 0:
+                self.reversing = True
+                speed = abs(speed)
+        else:
+            speed += ORANGE_ACCELERATION * dt
+
+        # re-apply speed along the current direction of travel
+        direction = math.atan2(self.vy, self.vx)
+        self.vx = math.cos(direction) * speed
+        self.vy = math.sin(direction) * speed
+
+        super().update(dt, player)
+
 
 
 class WasabiHazard(Ball):

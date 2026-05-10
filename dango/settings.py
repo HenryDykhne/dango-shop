@@ -1,3 +1,4 @@
+import os
 import random
 
 # Screen
@@ -42,6 +43,10 @@ BALL_SPEED = {
     "coal":   260,
 }
 
+# Game variables
+GAME_LENGTH = 90.0  # seconds
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Endlag
 PARRY_ENDLAG_DURATION = 0.4
 STAB_ENDLAG_DURATION = 0.4
@@ -49,6 +54,10 @@ STAB_ENDLAG_DURATION = 0.4
 # Green ball behavior
 GREEN_ACCEL = 600.0
 GREEN_MID_THRESHOLD = 50.0
+
+# Orange ball behavior
+ORANGE_DECELERATION = 200.0
+ORANGE_ACCELERATION = 400.0
 
 # hazard behavior
 WASABI_SCRAMBLE_DURATION = 3.0
@@ -79,35 +88,34 @@ PENALTY = 50
 # Day configs (from architecture.md)
 DAYS = [
     {
-        "bag":        {"orange": 4, "white": 4},
+        "bag":        {"pink": 4, "white": 4},
+        "stick_size": 2,
+        "quota":      1500,
+        "volley_gap": 3.0,
+    },
+    {
+        "bag":        {"pink": 4, "white": 4, "green": 3},
         "stick_size": 2,
         "quota":      2000,
         "volley_gap": 3.0,
     },
     {
-        "bag":        {"pink": 4, "white": 4, "green": 3},
-        "stick_size": 3,
-        "quota":      2500,
-        "volley_gap": 2.5,
-    },
-    {
         "bag":        {"pink": 4, "white": 4, "green": 3, "yellow": 2, "wasabi": 1},
-        "stick_size": 3,
-        "quota":      3000,
-        "volley_gap": 2.5,
+        "stick_size": 2,
+        "quota":      2000,
+        "volley_gap": 3.0,
     },
     {
         "bag":        {"pink": 4, "white": 4, "green": 3, "yellow": 2, "brown": 2, "wasabi": 1},
-        "stick_size": 4,
-        "quota":      3500,
-        "volley_gap": 2.5,
+        "stick_size": 3,
+        "quota":      3000,
+        "volley_gap": 3.0,
     },
     {
-        "bag":        {"pink":4, "white":4, "green":3, "yellow":2, "brown":2, "wasabi":1, "coal":1},
-        #"bag": {"pink":4, "white":4, "green":3, "yellow":2, "brown":2, "orange":2, "wasabi":1, "coal":1}, #actual
-        "stick_size": 4,
-        "quota":      4000,
-        "volley_gap": 2.5,
+        "bag":        {"pink":4, "white":4, "green":3, "yellow":2, "brown":2, "orange":2, "wasabi":1, "coal":1},
+        "stick_size": 3,
+        "quota":      3500,
+        "volley_gap": 3.0,
     },
 ]
 

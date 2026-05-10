@@ -102,7 +102,7 @@ class Player:
         """Return the parry hitbox Rect for `direction` at progress `prog` (0..1)."""
         if direction not in ('up', 'down'):
             return None
-        w = int(self.w * 2)
+        w = int(self.w * 3)
         h = int(self.h * 0.6)
         # position in front of the player (to the right)
         x = int(self.x + self.w / 2)
@@ -118,8 +118,8 @@ class Player:
 
         The stab is a short rectangular strike in front of the player.
         """
-        w = int(self.w * 1.6)
-        h = int(self.h * 0.5)
+        w = int(self.w * 4)
+        h = int(self.h * 0.6)
         # position a little ahead of player center
         x = int(self.x + self.w / 2)
         # small forward/back motion during the stab (prog 0..1)

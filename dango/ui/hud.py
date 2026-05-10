@@ -1,5 +1,5 @@
 import pygame
-from dango.settings import BALL_COLORS, current_score
+from dango.settings import BALL_COLORS, DAYS, current_score
 
 
 class HUD:
@@ -9,10 +9,12 @@ class HUD:
 
     def draw(self, screen):
         day_text = self.font.render(f"Day {self.scene.day}", True, (255, 220, 180))
-        screen.blit(day_text, (20, 20))
+        screen.blit(day_text, (20, 15))
         score = current_score()
-        items_text = self.font.render(f"Money: {score}¥", True, (220, 220, 220))
-        screen.blit(items_text, (20, 50))
+        items_text = self.font.render(f"Quota: ¥{score}/¥{DAYS[self.scene.day-1]['quota']}", True, (220, 220, 220))
+        screen.blit(items_text, (20, 45))
+        time_text = self.font.render(f"End of Day in: {int(self.scene.time_remaining)}s", True, (220, 220, 220))
+        screen.blit(time_text, (20, 75))
 
         # draw upcoming queue (if available)
         if hasattr(self.scene, 'queue'):
