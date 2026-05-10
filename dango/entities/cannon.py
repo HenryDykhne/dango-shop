@@ -1,7 +1,7 @@
 import math
 import random
 import pygame
-from dango.entities.ball import PinkBall, WhiteBall, GreenBall, BrownBall, WasabiHazard, CoalHazard, YellowBall
+from dango.entities.ball import PinkBall, WhiteBall, GreenBall, BrownBall, OrangeBall, WasabiHazard, CoalHazard, YellowBall
 from dango.settings import COAL_SPREAD_OFFSET, SCREEN_W
 
 
@@ -51,6 +51,8 @@ class Cannon:
             balls.append(BrownBall(self.x, self.y, rad))
         elif color_key == "wasabi":
             balls.append(WasabiHazard(self.x, self.y, rad))
+        elif color_key == 'orange':
+            balls.append(OrangeBall(self.x, self.y, rad))
         elif color_key == "coal":
             offset_rad = math.radians(COAL_SPREAD_OFFSET)
             balls.append(CoalHazard(self.x, self.y, rad))

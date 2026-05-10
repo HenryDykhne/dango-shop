@@ -1,7 +1,7 @@
 import math
 import pygame
 import random
-from dango.settings import DAYS, BALL_COLORS, add_score
+from dango.settings import DAYS, BALL_COLORS, BALL_VALUE, add_score
 
 
 class Customer:
@@ -49,6 +49,9 @@ class Customer:
         ratio = min(1, self.age / Customer.TIMINGS[self.phase])
         self.age += dt
         if self.age > Customer.TIMINGS[self.phase]:
+            # In the case they ran out of patience and left
+            if self.phase == Customer.WAITING:
+                add_score(-50)
             self.age = 0
             self.phase += 1
 
@@ -94,6 +97,9 @@ class Customers:
     def _reset_cooldown(self):
         self.cooldown = random.choice(Customers.COOLDOWNS)
 
+    def _stick_value(self, stick):
+        return sum(BALL_VALUE[color_key] for color_key in stick)
+
     def offer(self, stick):
         for customer in self.stalls:
             if customer != None and customer.offer(stick):
@@ -127,8 +133,7 @@ class Customers:
         for stick in dango_holders.sticks:
             if self.offer(stick):
                 used_stick = stick
-                # TODO figure out how much score to give
-                add_score(100)
+                add_score(self._stick_value(stick))
         if used_stick:
             dango_holders.sticks.remove(used_stick)
 

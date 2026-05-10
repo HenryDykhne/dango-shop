@@ -32,7 +32,7 @@ BALL_SPEED = {
     "green":  260,
     "yellow": 280,
     "brown":  280,
-    "orange": 220,
+    "orange": 400,
     "purple": 260,
     "black":  260,
     "wasabi": 260,
@@ -76,7 +76,7 @@ PENALTY = 50
 # Day configs (from architecture.md)
 DAYS = [
     {
-        "bag":        {"pink": 4, "white": 4},
+        "bag":        {"orange": 4, "white": 4},
         "stick_size": 2,
         "quota":      2000,
         "volley_gap": 3.0,

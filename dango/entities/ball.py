@@ -1,7 +1,7 @@
 import math
 import pygame
 from dango.entities.player import Player
-from dango.settings import AVOIDANCE_ACCEL, AVOIDANCE_SPEED_MULTIPLIER, BACKSTOP_WIDTH, BALL_RADIUS, BALL_COLORS, BALL_SPEED, BALL_VALUE, FIELD_TOP, FIELD_BOTTOM, GREEN_ACCEL, GREEN_MID_THRESHOLD, HOMING_ACCEL, HOMING_SPEED_MULTIPLIER, WASABI_SCRAMBLE_DURATION
+from dango.settings import AVOIDANCE_ACCEL, AVOIDANCE_SPEED_MULTIPLIER, BACKSTOP_WIDTH, BALL_RADIUS, BALL_COLORS, BALL_SPEED, BALL_VALUE, FIELD_TOP, FIELD_BOTTOM, GREEN_ACCEL, GREEN_MID_THRESHOLD, HOMING_ACCEL, HOMING_SPEED_MULTIPLIER, WASABI_SCRAMBLE_DURATION, add_score
 
 
 class Ball:
@@ -19,6 +19,7 @@ class Ball:
         self.x = float(x)
         self.y = float(y)
         self.origin_y = y
+        self.angle_rad = angle_rad
         self.radius = BALL_RADIUS
         self.alive = True
 
@@ -66,12 +67,13 @@ class Ball:
         self.alive = False
 
     def on_hit(self, player):
-        # this should be a penalty in score
         self.alive = False
+        add_score(-50)
 
     def on_hit_backstop(self):
         # this should be a penalty in score
         self.alive = False
+        add_score(-50)
 
     def on_parried_up(self):
         pass
@@ -180,6 +182,23 @@ class YellowBall(Ball):
         # deal with hitting the backstop
         if self.x - self.radius < BACKSTOP_WIDTH:
             self.on_hit_backstop()
+
+class OrangeBall(Ball):
+    def __init__(self, x, y, angle_rad=math.pi):
+        super().__init__(x, y, angle_rad, color_key="orange")
+        self.acceleration = -150
+    
+    def update(self, dt, player):
+        super().update(dt, player)
+        prev_vx = self.vx
+
+        self.vx += self.acceleration * dt * math.cos(self.angle_rad)
+        self.vy -= math.copysign(1, self.vy) * self.acceleration * dt * math.cos(self.angle_rad)
+        
+        # flip speed once we are slow enough
+        if self.acceleration < 0 and math.sqrt(self.vx**2 + self.vy**2) < 30:
+            self.acceleration = abs(self.acceleration)
+
 
 class WasabiHazard(Ball):
     is_hazard = True
