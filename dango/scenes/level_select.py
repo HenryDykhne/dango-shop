@@ -65,7 +65,7 @@ class LevelSelect:
         screen.blit(title, (self.LEFT_W // 2 - title.get_width() // 2, 30))
 
         subtitle = self.font_subtitle.render(
-            "by Henry Dykhne, Alon Djurinsky and Kajal Panicker for ToJam 2026!",
+            "By Henry Dykhne, Alon Djurinsky and Kajal Panicker for ToJam 2026!",
             True, (255, 220, 180)
         )
         screen.blit(subtitle, (self.LEFT_W // 2 - subtitle.get_width() // 2, 100))
