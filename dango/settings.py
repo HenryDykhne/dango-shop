@@ -2,6 +2,7 @@ import random
 
 # Screen
 SCREEN_W, SCREEN_H = 1280, 720
+BACKSTOP_WIDTH = 50
 FPS = 60
 
 # player
@@ -23,7 +24,7 @@ BALL_COLORS = {
     "purple": (147, 112, 219),
     "black":  (24, 24, 24),
     "wasabi": (50, 205, 50),
-    "coal":   (200, 80, 0),
+    "coal":   (36, 26, 11),
 }
 BALL_SPEED = {
     "pink":   200,
@@ -49,7 +50,6 @@ GREEN_MID_THRESHOLD = 50.0
 # hazard behavior
 WASABI_SCRAMBLE_DURATION = 3.0
 COAL_SPREAD_OFFSET = 15.0  # degrees of spread for coal balls
-
 
 
 # Homing Behavior for yellow and brown balls

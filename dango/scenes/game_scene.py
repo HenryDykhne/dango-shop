@@ -5,7 +5,7 @@ from dango.entities.cannon import Cannon
 from dango.entities.Customers import Customers
 from dango.entities.dangoHolders import DangoHolders
 from dango.systems.bag import Bag, Queue
-from dango.settings import DAYS, reset_score_info, PARRY_ENDLAG_DURATION, STAB_ENDLAG_DURATION
+from dango.settings import BACKSTOP_WIDTH, DAYS, FIELD_BOTTOM, FIELD_TOP, SCREEN_H, SCREEN_W, reset_score_info, PARRY_ENDLAG_DURATION, STAB_ENDLAG_DURATION
 from dango.ui.hud import HUD
 
 
@@ -56,7 +56,7 @@ class GameScene:
                     and (self.last_parry_time is None or (current_time - self.last_parry_time) > PARRY_ENDLAG_DURATION):
                     self.last_parry_time = current_time
                     # parry up: jump colliding ball to second place in the queue
-                    # compute parry hitbox at t=0 and use it
+                    # compute parry hitbox at t=0 and use itplayer.stick.add(self.color_key)
                     #  for collision
                     parry_rect = self.player.compute_parry_rect('up', prog=0.0)
                     had_parry = False
@@ -83,7 +83,7 @@ class GameScene:
                     self.player.start_parry('down')
 
     def update(self, dt, manager):
-        self.player.update(dt)
+        self.player.update(dt, self.balls)
         # advance parry indicator timer
         if self.parry_indicator is not None:
             self.parry_indicator['t'] += dt
@@ -107,7 +107,8 @@ class GameScene:
 
     def draw(self, screen):
         # draw field background
-        pygame.draw.rect(screen, (60, 40, 20), (0, 80, 1280, 560))
+        pygame.draw.rect(screen, (60, 40, 20), (0, FIELD_TOP, SCREEN_W, FIELD_BOTTOM - FIELD_TOP))
+        pygame.draw.rect(screen, (30, 20, 40), (0, FIELD_TOP, BACKSTOP_WIDTH, FIELD_BOTTOM - FIELD_TOP))
 
         for b in self.balls:
             b.draw(screen)

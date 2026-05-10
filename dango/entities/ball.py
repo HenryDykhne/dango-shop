@@ -1,7 +1,7 @@
 import math
 import pygame
 from dango.entities.player import Player
-from dango.settings import AVOIDANCE_ACCEL, AVOIDANCE_SPEED_MULTIPLIER, BALL_RADIUS, BALL_COLORS, BALL_SPEED, BALL_VALUE, FIELD_TOP, FIELD_BOTTOM, GREEN_ACCEL, GREEN_MID_THRESHOLD, HOMING_ACCEL, HOMING_SPEED_MULTIPLIER
+from dango.settings import AVOIDANCE_ACCEL, AVOIDANCE_SPEED_MULTIPLIER, BACKSTOP_WIDTH, BALL_RADIUS, BALL_COLORS, BALL_SPEED, BALL_VALUE, FIELD_TOP, FIELD_BOTTOM, GREEN_ACCEL, GREEN_MID_THRESHOLD, HOMING_ACCEL, HOMING_SPEED_MULTIPLIER, WASABI_SCRAMBLE_DURATION
 
 
 class Ball:
@@ -41,6 +41,10 @@ class Ball:
         # bounce off top/bottom
         self._bounce()
 
+        # deal with hitting the backstop
+        if self.x - self.radius < BACKSTOP_WIDTH:
+            self.on_hit_backstop()
+
 
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
@@ -56,6 +60,18 @@ class Ball:
         if self.y + self.radius >= FIELD_BOTTOM:
             self.y = FIELD_BOTTOM - self.radius
             self.vy *= -1
+
+    def on_caught(self, player):
+        player.stick.add(self.color_key)
+        self.alive = False
+
+    def on_hit(self, player):
+        # this should be a penalty in score
+        self.alive = False
+
+    def on_hit_backstop(self):
+        # this should be a penalty in score
+        self.alive = False
 
     def on_parried_up(self):
         pass
@@ -104,6 +120,10 @@ class GreenBall(Ball):
         # bounce off top/bottom
         self._bounce()
 
+        # deal with hitting the backstop
+        if self.x - self.radius < BACKSTOP_WIDTH:
+            self.on_hit_backstop()
+
 class BrownBall(Ball):
     def __init__(self, x, y, angle_rad=math.pi):
         super().__init__(x, y, angle_rad, color_key="brown")
@@ -130,6 +150,10 @@ class BrownBall(Ball):
         # bounce off top/bottom
         self._bounce()
 
+        # deal with hitting the backstop
+        if self.x - self.radius < BACKSTOP_WIDTH:
+            self.on_hit_backstop()
+
 class YellowBall(Ball):
     def __init__(self, x, y, angle_rad=math.pi):
         super().__init__(x, y, angle_rad, color_key="yellow")
@@ -153,6 +177,10 @@ class YellowBall(Ball):
         # bounce off top/bottom
         self._bounce()
 
+        # deal with hitting the backstop
+        if self.x - self.radius < BACKSTOP_WIDTH:
+            self.on_hit_backstop()
+
 class WasabiHazard(Ball):
     is_hazard = True
 
@@ -161,6 +189,15 @@ class WasabiHazard(Ball):
 
     def on_caught(self, player: Player):
         player.scramble_controls_till = pygame.time.get_ticks() / 1000.0 + WASABI_SCRAMBLE_DURATION  # scramble controls
+        self.alive = False
+
+    def on_hit(self, player):
+        player.scramble_controls_till = pygame.time.get_ticks() / 1000.0 + WASABI_SCRAMBLE_DURATION  # scramble controls
+        self.alive = False
+
+    def on_hit_backstop(self):
+        # no penalty here
+        self.alive = False
 
 
 class CoalHazard(Ball):
@@ -171,3 +208,12 @@ class CoalHazard(Ball):
 
     def on_caught(self, player):
         player.stick.clear()
+        self.alive = False
+
+    def on_hit(self, player):
+        player.stick.clear()
+        self.alive = False
+
+    def on_hit_backstop(self):
+        # no penalty here
+        self.alive = False

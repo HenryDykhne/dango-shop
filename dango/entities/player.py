@@ -41,7 +41,7 @@ class Player:
 
         return vx, vy
 
-    def update(self, dt):
+    def update(self, dt, balls):
         vx, vy = self.handle_input()
         self.x += vx * self.speed * dt
         self.y += vy * self.speed * dt
@@ -64,6 +64,8 @@ class Player:
                     self._stabs.remove(s)
                 except ValueError:
                     pass
+        # deal with hits
+        self.handle_hits(balls)
 
     def compute_parry_rect(self, direction, prog=0.0):
         """Return the parry hitbox Rect for `direction` at progress `prog` (0..1)."""
@@ -94,14 +96,28 @@ class Player:
         x += int(prog * reach)
         y = int(self.y - h / 2)
         return pygame.Rect(x, y, w, h)
+    
+    def compute_self_rect(self):
+        """Return the player's own hitbox Rect (for collisions when not stabbing)."""
+        w = self.w
+        h = self.h
+        x = int(self.x - w / 2)
+        y = int(self.y - h / 2)
+        return pygame.Rect(x, y, w, h)
+    
+    def handle_hits(self, balls):
+        body_rect = self.compute_self_rect()
+        for b in list(balls):
+            if b.alive and body_rect.colliderect(b.get_rect()):
+                b.alive = False
+                b.on_hit(self)
 
     def stab(self, balls):
         # use stab hitbox for collision when stabbing
         stab_rect = self.compute_stab_rect(prog=0.0)
         for b in list(balls):
             if b.alive and stab_rect.colliderect(b.get_rect()):
-                b.alive = False
-                self.stick.add(b.color_key)
+                b.on_caught(self)
 
     def start_stab(self):
         """Start a short visual stab effect and used hitbox for collisions."""

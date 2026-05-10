@@ -1,5 +1,5 @@
 import pygame
-from dango.settings import BALL_COLORS, FIELD_TOP, current_score
+from dango.settings import BALL_COLORS, current_score
 
 
 class HUD:

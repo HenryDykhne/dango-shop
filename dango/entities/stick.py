@@ -23,3 +23,6 @@ class Stick:
             y = y_offset + dy*i
 
             pygame.draw.circle(screen, color, (x, y), radius)
+
+    def clear(self):
+        self.ball_keys = []
