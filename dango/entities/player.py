@@ -1,5 +1,5 @@
 import pygame
-from dango.settings import FIELD_TOP, FIELD_BOTTOM, PLAYER_SPEED
+from dango.settings import FIELD_TOP, FIELD_BOTTOM, PLAYER_SPEED, PLAYER_DASH_SPEED, PLAYER_AFTERIMAGE_CD, PLAYER_AFTERIMAGE_LEN
 from dango.entities.stick import Stick
 
 class Player:
@@ -18,6 +18,15 @@ class Player:
         # visual stab effects: list of dicts {t, dur}
         self._stabs = []
 
+        # dashing
+        self.direction_x = 1
+        self.direction_y = 0
+        self.dash_cooldown = 0
+        self.dash_buffered = False
+        self.is_dashing = False
+        self.afterimages = []
+        self.afterimage_cooldown = 0
+
     @property
     def rect(self):
         return pygame.Rect(int(self.x - self.w / 2), int(self.y - self.h / 2), self.w, self.h)
@@ -35,16 +44,25 @@ class Player:
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             vy = 1
 
+        # Determine if player is dashing
+        self.is_dashing = keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]
+
         if self.scramble_controls_till > pygame.time.get_ticks() / 1000.0:
             vx = -vx
             vy = -vy
 
+        self.direction_x = vx
+        self.direction_y = vy
         return vx, vy
 
     def update(self, dt, balls):
         vx, vy = self.handle_input()
-        self.x += vx * self.speed * dt
-        self.y += vy * self.speed * dt
+        if self.is_dashing:
+            vx, vy = self.direction_x, self.direction_y
+
+        speed = PLAYER_DASH_SPEED if self.is_dashing else self.speed
+        self.x += vx * speed * dt
+        self.y += vy * speed * dt
         # clamp to field
         self.y = max(FIELD_TOP + self.h / 2, min(FIELD_BOTTOM - self.h / 2, self.y))
         self.x = max(0 + self.w / 2, min(1280 - self.w / 2, self.x))
@@ -66,6 +84,19 @@ class Player:
                     pass
         # deal with hits
         self.handle_hits(balls)
+
+        # dashing
+        self.dash_cooldown -= dt
+        for image in self.afterimages[::]:
+            image['current'] += dt
+            if image['current'] > image['total']:
+                self.afterimages.remove(image)
+        
+        self.afterimage_cooldown = max(0, self.afterimage_cooldown - dt)
+        if self.is_dashing and self.afterimage_cooldown <= 0:
+            self.afterimages.append({'total': PLAYER_AFTERIMAGE_LEN, 'current': 0, 'rect': self.compute_self_rect()})
+            self.afterimage_cooldown = PLAYER_AFTERIMAGE_CD
+
 
     def compute_parry_rect(self, direction, prog=0.0):
         """Return the parry hitbox Rect for `direction` at progress `prog` (0..1)."""
@@ -130,6 +161,15 @@ class Player:
         self._parries.append({'dir': direction, 't': 0.0, 'dur': 0.28})
 
     def draw(self, screen):
+        
+        for image in self.afterimages:
+            prog = image['current'] / image['total']
+            alpha = int(200 * (1.0 - prog))
+            rect = image['rect']
+            surf = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
+            color = (255, 255, 255, alpha)
+            pygame.draw.rect(surf, color, pygame.Rect(0, 0, rect.width, rect.height))
+            screen.blit(surf, (rect.x, rect.y))
         pygame.draw.rect(screen, (200, 200, 255), self.rect)
         # draw parry swipes
         for p in self._parries:
