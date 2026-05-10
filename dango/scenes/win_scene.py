@@ -15,9 +15,7 @@ class QuotaSucceedScene:
         try:
             raw = pygame.image.load(os.path.join(BASE_DIR, "img/TOJam_Goat.webp")).convert_alpha()
             self.image = pygame.transform.scale(raw, (176, 300))
-            print("ok")
         except Exception as e:
-            print("Image load failed:", e)
             self.image = None
 
         self.image_rect = pygame.Rect(SCREEN_W // 2 - (176/2), 200, 176, 300)

@@ -68,7 +68,7 @@ class Ball:
 
     def on_hit(self, player):
         self.alive = False
-        add_score(-20)
+        add_score(-10)
 
     def on_hit_backstop(self):
         # this should be a penalty in score
@@ -216,10 +216,12 @@ class WasabiHazard(Ball):
 
     def on_caught(self, player: Player):
         player.scramble_controls_till = pygame.time.get_ticks() / 1000.0 + WASABI_SCRAMBLE_DURATION  # scramble controls
+        add_score(-20)
         self.alive = False
 
     def on_hit(self, player):
         player.scramble_controls_till = pygame.time.get_ticks() / 1000.0 + WASABI_SCRAMBLE_DURATION  # scramble controls
+        add_score(-20)
         self.alive = False
 
     def on_hit_backstop(self):
@@ -235,10 +237,12 @@ class CoalHazard(Ball):
 
     def on_caught(self, player):
         player.stick.clear()
+        add_score(-20)
         self.alive = False
 
     def on_hit(self, player):
         player.stick.clear()
+        add_score(-20)
         self.alive = False
 
     def on_hit_backstop(self):

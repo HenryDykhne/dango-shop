@@ -8,7 +8,7 @@ FPS = 60
 
 # player
 PLAYER_SPEED = 300.0
-PLAYER_DASH_SPEED = 750.0
+PLAYER_DASH_SPEED = 650.0
 PLAYER_AFTERIMAGE_CD = 0.02
 PLAYER_AFTERIMAGE_LEN = 0.5
 
@@ -27,7 +27,7 @@ BALL_COLORS = {
     "orange": (255, 140, 0),
     "purple": (147, 112, 219),
     "black":  (24, 24, 24),
-    "wasabi": (50, 205, 50),
+    "wasabi": (20, 122, 0),
     "coal":   (36, 26, 11),
 }
 BALL_SPEED = {
@@ -44,7 +44,7 @@ BALL_SPEED = {
 }
 
 # Game variables
-GAME_LENGTH = 90.0  # seconds
+GAME_LENGTH = 100.0  # seconds
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Endlag
@@ -57,7 +57,7 @@ GREEN_MID_THRESHOLD = 50.0
 
 # Orange ball behavior
 ORANGE_DECELERATION = 200.0
-ORANGE_ACCELERATION = 400.0
+ORANGE_ACCELERATION = 600.0
 
 # hazard behavior
 WASABI_SCRAMBLE_DURATION = 3.0
@@ -90,32 +90,32 @@ DAYS = [
     {
         "bag":        {"pink": 4, "white": 4},
         "stick_size": 2,
-        "quota":      1500,
-        "volley_gap": 3.0,
+        "quota":      1250,
+        "volley_gap": 2.2,
     },
     {
         "bag":        {"pink": 4, "white": 4, "green": 3},
-        "stick_size": 2,
-        "quota":      2000,
-        "volley_gap": 3.0,
-    },
-    {
-        "bag":        {"pink": 4, "white": 4, "green": 3, "yellow": 2, "wasabi": 1},
-        "stick_size": 2,
-        "quota":      2000,
-        "volley_gap": 3.0,
-    },
-    {
-        "bag":        {"pink": 4, "white": 4, "green": 3, "yellow": 2, "brown": 2, "wasabi": 1},
         "stick_size": 3,
-        "quota":      3000,
-        "volley_gap": 3.0,
+        "quota":      1500,
+        "volley_gap": 2.2,
     },
     {
-        "bag":        {"pink":4, "white":4, "green":3, "yellow":2, "brown":2, "orange":2, "wasabi":1, "coal":1},
+        "bag":        {"white": 4, "green": 3, "yellow": 2, "wasabi": 1},
         "stick_size": 3,
-        "quota":      3500,
-        "volley_gap": 3.0,
+        "quota":      1750,
+        "volley_gap": 2.2,
+    },
+    {
+        "bag":        {"green": 3, "yellow": 2, "brown": 2, "wasabi": 1},
+        "stick_size": 3,
+        "quota":      2000,
+        "volley_gap": 2.2,
+    },
+    {
+        "bag":        {"yellow":2, "brown":2, "orange":2, "coal":1},
+        "stick_size": 3,
+        "quota":      2250,
+        "volley_gap": 2.2,
     },
 ]
 

@@ -1,6 +1,7 @@
 import math
 import pygame
 import random
+from collections import Counter
 from dango.settings import DAYS, BALL_COLORS, BALL_VALUE, add_score
 
 
@@ -12,7 +13,7 @@ class Customer:
 
     TIMINGS = {
         ENTERING: 1,
-        WAITING: 16,
+        WAITING: 20,
         LEAVING: 1,
         GONE: 1e100,
     }
@@ -34,10 +35,10 @@ class Customer:
             options = list(day_config['bag'].keys())
             while (thing := random.choice(options)) in ['wasabi', 'coal']:
                 pass
-            self.demand.append(random.choice(options))
+            self.demand.append(thing)
 
     def offer(self, stick):
-        if self.phase == Customer.WAITING and stick == self.demand:
+        if self.phase == Customer.WAITING and Counter(stick) == Counter(self.demand):
             self.age = 0.0
             self.phase = Customer.LEAVING
             self.fed = True
@@ -91,7 +92,7 @@ class Customer:
 
 class Customers:
     MAX_CUSTOMERS = 5
-    COOLDOWNS = [6] #[12, 32, 14, 10, 25, 24]
+    COOLDOWNS = [4] #[12, 32, 14, 10, 25, 24]
 
     def __init__(self, day):
         self.stalls = [None]*Customers.MAX_CUSTOMERS
