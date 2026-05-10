@@ -5,14 +5,14 @@ from dango.settings import SCREEN_W, DAYS, BALL_COLORS, SCREEN_H
 BALL_RADIUS = 10
 
 BALL_INFO = [
-    ("pink",   "Dango move slowly"),
-    ("white",  "Dango move faster"),
-    ("green",  "Dango move in a wavy pattern"),
-    ("yellow", "Dango will home in on you"),
-    ("brown",  "Dango will avoid you"),
-    ("orange", "Dango slow to a stop and then accelerate"),
-    ("wasabi", "Hazard — scrambles your controls briefly"),
-    ("coal",   "Hazard — destroys all dango on your stick"),
+    ("pink",   "Dango move slowly", "Sakura"),
+    ("white",  "Dango move faster", "Shiratama"),
+    ("green",  "Dango move in a wavy pattern", "Matcha"),
+    ("yellow", "Dango will home in on you", "Custard"),
+    ("brown",  "Dango will avoid you", "Mitarashi"),
+    ("orange", "Dango slow to a stop and then accelerate", "Chestnut"),
+    ("wasabi", "Hazard — scrambles your controls briefly", "Wasabi"),
+    ("coal",   "Hazard — destroys all dango on your stick", "Coal"),
 ]
 
 CONTROLS = [
@@ -114,12 +114,11 @@ class LevelSelect:
 
         # ── balls & hazards ─────────────────────────────────────────
         y = self._draw_section(screen, "Balls & Hazards", y)
-        for color_key, desc in BALL_INFO:
+        for color_key, desc, name in BALL_INFO:
             color = BALL_COLORS[color_key]
             # draw example ball
             pygame.draw.circle(screen, color, (pad + BALL_RADIUS, y + BALL_RADIUS), BALL_RADIUS)
-            if color_key == "white":
-                pygame.draw.circle(screen, (150, 150, 150), (pad + BALL_RADIUS, y + BALL_RADIUS), BALL_RADIUS, 1)
-            label = self.font_body.render(f"  {color_key.capitalize()} {desc}", True, (210, 210, 210))
+            pygame.draw.circle(screen, (100, 100, 100), (pad + BALL_RADIUS, y + BALL_RADIUS), BALL_RADIUS, 1)
+            label = self.font_body.render(f"  {name.capitalize()} {desc}", True, (210, 210, 210))
             screen.blit(label, (pad + BALL_RADIUS * 2 + 4, y + BALL_RADIUS - label.get_height() // 2))
             y += BALL_RADIUS * 2 + 6
